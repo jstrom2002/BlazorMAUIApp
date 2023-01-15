@@ -23,7 +23,6 @@ public static class MauiProgram
 
 		builder.Services.AddMudServices();
 		builder.Services.AddSingleton<WeatherForecastService>();
-        //builder.Services.AddSingleton<CPPinteropService>();
 
         return builder.Build();
 	}
