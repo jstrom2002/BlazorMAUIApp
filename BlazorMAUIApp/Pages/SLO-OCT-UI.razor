@@ -3,51 +3,144 @@
 @using BlazorMAUIApp.Data;
 @using MudBlazor;
 
-<MudPaper>
-    <MudText Typo="Typo.h1">SLO/OCT UI</MudText>
-    <br />
-    <MudImage Src="images/fake_slo_image.jpeg" Width=200 Height=200 Alt="SLO" Elevation="25" Class="rounded-lg"/>
-    <MudImage Src="images/fake_oct_image.jpeg" Width=200 Height=200 Alt="OCT" Elevation="25" Class="rounded-lg" />
-    <br />
-    <MudButton Variant="Variant.Filled" Color="Color.Primary" >Scan</MudButton>
-    <MudButton Variant="Variant.Filled" Color="Color.Primary">Save Raw</MudButton>
-    <MudSlider @bind-Value=@focus T=float Min="0.0f" Max="100.0f" ValueLabel="true">Focus: @focus.ToString()</MudSlider>
-    <MudSlider @bind-Value=@contrast T=float Min="0.0f" Max="100.0f" ValueLabel="true">Contrast: @contrast.ToString()</MudSlider>
+<MudMainContent>
+    <MudContainer>
+        <MudText Typo="Typo.h1">SLO/OCT UI</MudText>
 
-    <div class="d-flex flex-grow-1 gap-4">
-        <MudButton class="btn btn-primary" @onclick="IncrementCount">Increment Counter</MudButton>
-        <MudText>@currentCount</MudText>
-    </div>
-    <MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="MultiplyByTwo">Test C++ dll loading</MudButton>
-    <MudText>cpp 'MultiplyByTwo(counter)' function returns: @dllResult</MudText>
-    <br/>
-    <MudSpacer />
-    <MudSelect Variant="Variant.Filled" T="string" Label="Windowing Function" AnchorOrigin="Origin.BottomCenter">
-        @foreach (var window in windowingFuncs)
-        {
-            <MudSelectItem T="string" Value="@window">@window</MudSelectItem>
-        }
-    </MudSelect>
-    <br/>
-    <MudNumericField @bind-Value="numAScans" Label="numAScans" Variant="Variant.Text" Min="0" Max="10" />
-    <MudNumericField @bind-Value="numBScans" Label="numBScans" Variant="Variant.Text" Min="0" Max="10" />
-</MudPaper>
+        <MudText>TEST SECTION:</MudText>
+        <MudPaper>
+            <MudPaper Class="d-flex flex-row flex-grow-1 gap-4">
+                <MudButton class="btn btn-primary" @onclick="IncrementCount">Increment Counter</MudButton>
+                <MudText>@currentCount</MudText>
+            </MudPaper>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="MultiplyByTwo">Test C++ dll loading</MudButton>
+            <MudText>cpp 'MultiplyByTwo(counter)' function returns: @dllResult</MudText>
+        </MudPaper>
+        <MudSpacer />
+        <br/>
+
+        <MudPaper Class="d-flex flex-row flex-grow-1 gap-4">
+               
+               @*SLO Controls*@
+            <MudPaper Class="d-flex flex-column gap-2" Square="true">
+                <br />
+                <MudImage Src="images/fake_slo_image.jpeg" Width=200 Height=200 Alt="SLO" Elevation="25" Class="rounded-lg"/>
+                <br />
+                <MudPaper Class="d-flex flex-row gap-3">
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" >Scan</MudButton>
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary">Save Raw</MudButton>
+                    <MudSwitch @bind-Checked="@MPVon" Label="MPV" Color="Color.Primary" />
+                    <MudSwitch @bind-Checked="@ContrastOn" Label="Contrast" Color="Color.Primary" />
+                    <MudSwitch @bind-Checked="@OpacityOn" Label="Opacity" Color="Color.Primary" />
+                </MudPaper>
+
+                <MudPaper Class="d-flex flex-row gap-3">
+                    <MudSlider Variant="Variant.Outlined" @bind-Value=@focusSLO T=float Min="0.0f" Max="100.0f" ValueLabel="true">Focus: @focusSLO.ToString()</MudSlider>
+                    <MudNumericField @bind-Value="focusSLO" Variant="Variant.Text" Min="0" Max="100" />
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary">Focus</MudButton>
+                </MudPaper>
+                <MudPaper Class="d-flex flex-row gap-3">
+                    <MudSlider Variant="Variant.Outlined" @bind-Value=@contrastSLO T=float Min="0.0f" Max="100.0f" ValueLabel="true">Contrast: @contrastSLO.ToString()</MudSlider>
+                    <MudNumericField @bind-Value="contrastSLO" Variant="Variant.Text" Min="0.0f" Max="100.0f" />
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary">Contrast</MudButton>
+                </MudPaper>
+
+
+                <br/>
+                <MudNumericField @bind-Value="numAScans" Label="numAScans" Variant="Variant.Text" Min="0" Max="10" />
+                <MudNumericField @bind-Value="numBScans" Label="numBScans" Variant="Variant.Text" Min="0" Max="10" />
+            </MudPaper>
+
+            <br />
+
+            @*OCT Controls*@
+            <MudPaper Class="d-flex flex-column gap-2" Square="true">
+                <br />
+                <MudImage Src="images/fake_oct_image.jpeg" Width=200 Height=200 Alt="OCT" Elevation="25" Class="rounded-lg" />
+                <br />
+                <MudPaper Class="d-flex flex-row gap-3">
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary">Scan</MudButton>
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary">Alignment Mode</MudButton>
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary">Save Raw</MudButton>
+                    <MudSwitch @bind-Checked="@ReferenceIntensityOn" Label="Reference Intensity" Color="Color.Primary" />
+                </MudPaper>
+
+                <MudPaper Class="d-flex flex-row gap-3">
+                    <MudNumericField @bind-Value="numAScans" Label="numAScans" Variant="Variant.Text" Min="0" Max="10" />
+                    <MudNumericField @bind-Value="numBScans" Label="numBScans" Variant="Variant.Text" Min="0" Max="10" />
+                    <MudNumericField @bind-Value="AscanAvg" Label="Ascan Avg" Variant="Variant.Text" Min="0" Max="10" />
+                    <MudNumericField @bind-Value="BscanAvg" Label="Bscan Avg" Variant="Variant.Text" Min="0" Max="10" />
+                </MudPaper>
+
+                <MudPaper Class="d-flex flex-row gap-3">
+                    <MudSelect Variant="Variant.Filled" T="string" Label="Scan Speed" AnchorOrigin="Origin.BottomCenter">
+                        @foreach (var scanSpeed in scanSpeeds)
+                        {
+                            <MudSelectItem T="string" Value="@scanSpeed">@scanSpeed</MudSelectItem>
+                        }
+                    </MudSelect>
+                    <MudSelect Variant="Variant.Filled" T="string" Label="Windowing Function" AnchorOrigin="Origin.BottomCenter">
+                        @foreach (var window in windowingFuncs)
+                        {
+                                <MudSelectItem T="string" Value="@window">@window</MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudPaper>
+
+                <MudPaper Class="d-flex flex-row gap-3">
+                    <MudSlider Variant="Variant.Outlined" @bind-Value=@referenceArmOCT T=float Min="0.0f" Max="100.0f" ValueLabel="true">Reference Arm: @referenceArmOCT.ToString()</MudSlider>
+                    <MudNumericField @bind-Value="referenceArmOCT" Variant="Variant.Text" Min="0.0f" Max="100.0f" />
+                </MudPaper>
+                <MudPaper Class="d-flex flex-row gap-3">
+                    <MudSlider Variant="Variant.Outlined" @bind-Value=@dispersionOCT T=float Min="0.0f" Max="100.0f" ValueLabel="true">Dispersion: @dispersionOCT.ToString()</MudSlider>
+                    <MudNumericField @bind-Value="dispersionOCT" Variant="Variant.Text" Min="0.0f" Max="100.0f" />
+                </MudPaper>
+                <MudPaper Class="d-flex flex-row gap-3">
+                    <MudSlider Variant="Variant.Outlined" @bind-Value=@focusOCT T=float Min="0.0f" Max="100.0f" ValueLabel="true">Focus: @focusOCT.ToString()</MudSlider>
+                    <MudNumericField @bind-Value="focusOCT" Variant="Variant.Text" Min="0.0f" Max="100.0f" />
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary">Auto Focus</MudButton>
+                </MudPaper>
+                <MudPaper Class="d-flex flex-row gap-3">
+                    <MudSlider Variant="Variant.Outlined" @bind-Value=@contrastOCT T=float Min="0.0f" Max="100.0f" ValueLabel="true">Contrast: @contrastOCT.ToString()</MudSlider>
+                    <MudNumericField @bind-Value="contrastOCT" Variant="Variant.Text" Min="0.0f" Max="100.0f" />
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary">Auto Contrast</MudButton>
+                </MudPaper>
+            </MudPaper>
+
+        </MudPaper>
+        <br/>
+    </MudContainer>
+</MudMainContent>
 
 @code {
-    private int currentCount = 0;
-    private string dllResult = "";
-    private int numAScans = 0;
-    private int numBScans = 0;
-    private string[] windowingFuncs = { "Welch", "Blackmann", "Nutall", "Blackmann-Nutall", "Gaussian", "Tukey", "Poisson" };
-    private float focus = 0.0f;
-    private float contrast = 0.0f;
+    int currentCount = 0;
+    string dllResult = "";
+    int numAScans = 0;
+    int numBScans = 0;
+    int AscanAvg = 0;
+    int BscanAvg = 0;
+    string[] scanSpeeds = { "1kHz", "5kHz", "10kHz", "50kHz" };
+    string[] windowingFuncs = { "Welch", "Blackmann", "Nutall", "Blackmann-Nutall", "Gaussian", "Tukey", "Poisson" };
 
-    private void IncrementCount()
+    bool MPVon = false;
+    bool ContrastOn = false;
+    bool OpacityOn = false;
+    bool ReferenceIntensityOn = false;
+
+    float focusSLO = 0.0f;
+    float contrastSLO = 0.0f;
+
+    float referenceArmOCT = 0.0f;
+    float dispersionOCT = 0.0f;
+    float focusOCT = 0.0f;
+    float contrastOCT = 0.0f;
+
+    void IncrementCount()
     {
         currentCount++;
     }
 
-    private void MultiplyByTwo()
+    void MultiplyByTwo()
     {
         dllResult = CPPinteropService.Diu(currentCount).ToString();
     }
