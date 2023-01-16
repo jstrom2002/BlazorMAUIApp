@@ -1,0 +1,54 @@
+﻿@page "/SLO-OCT-UI"
+@using System.Diagnostics;
+@using BlazorMAUIApp.Data;
+@using MudBlazor;
+
+<MudPaper>
+    <MudText Typo="Typo.h1">SLO/OCT UI</MudText>
+    <br />
+    <MudImage Src="images/fake_slo_image.jpeg" Width=200 Height=200 Alt="SLO" Elevation="25" Class="rounded-lg"/>
+    <MudImage Src="images/fake_oct_image.jpeg" Width=200 Height=200 Alt="OCT" Elevation="25" Class="rounded-lg" />
+    <br />
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" >Scan</MudButton>
+    <MudButton Variant="Variant.Filled" Color="Color.Primary">Save Raw</MudButton>
+    <MudSlider @bind-Value=@focus T=float Min="0.0f" Max="100.0f" ValueLabel="true">Focus: @focus.ToString()</MudSlider>
+    <MudSlider @bind-Value=@contrast T=float Min="0.0f" Max="100.0f" ValueLabel="true">Contrast: @contrast.ToString()</MudSlider>
+
+    <div class="d-flex flex-grow-1 gap-4">
+        <MudButton class="btn btn-primary" @onclick="IncrementCount">Increment Counter</MudButton>
+        <MudText>@currentCount</MudText>
+    </div>
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="MultiplyByTwo">Test C++ dll loading</MudButton>
+    <MudText>cpp 'MultiplyByTwo(counter)' function returns: @dllResult</MudText>
+    <br/>
+    <MudSpacer />
+    <MudSelect Variant="Variant.Filled" T="string" Label="Windowing Function" AnchorOrigin="Origin.BottomCenter">
+        @foreach (var window in windowingFuncs)
+        {
+            <MudSelectItem T="string" Value="@window">@window</MudSelectItem>
+        }
+    </MudSelect>
+    <br/>
+    <MudNumericField @bind-Value="numAScans" Label="numAScans" Variant="Variant.Text" Min="0" Max="10" />
+    <MudNumericField @bind-Value="numBScans" Label="numBScans" Variant="Variant.Text" Min="0" Max="10" />
+</MudPaper>
+
+@code {
+    private int currentCount = 0;
+    private string dllResult = "";
+    private int numAScans = 0;
+    private int numBScans = 0;
+    private string[] windowingFuncs = { "Welch", "Blackmann", "Nutall", "Blackmann-Nutall", "Gaussian", "Tukey", "Poisson" };
+    private float focus = 0.0f;
+    private float contrast = 0.0f;
+
+    private void IncrementCount()
+    {
+        currentCount++;
+    }
+
+    private void MultiplyByTwo()
+    {
+        dllResult = CPPinteropService.Diu(currentCount).ToString();
+    }
+}
